@@ -1,0 +1,34 @@
+// 大屏最重要的是数据适配的问题(保证页面不失真)
+/* 
+  1.vw vh 适配
+  ie8以上支持 
+  100px就是100vh(高为1080)--> 1080/100vh = 10.8(1vh = 10.8px) --> 100/10.8 = 9.25vh  
+  文字不支持vh 、 wh
+*/
+/*
+    2.h5中scale实现(scale上层的元素，下层的元素也会进行scale)
+    最外层盒子100vh，100vw，中间的盒子为100%，100%
+    当视图放大缩小的时候,scale元素进行缩放，变大（缩小放大的基点在中心）,放大之后内容被顶出去了
+    应该是以设备的基点为中心，而不是以盒子为正中心
+    将scale的基点放在屏幕的左上角 transform-origin : top center(这样放大缩小就不会被顶出去了)
+    将元素定位为fixed 左边和上边为设备宽度和高度的一半 {position:fixed;left:50%;top:50%}
+    js 控制数据大屏的放大和缩小 document.querySelector
+    计算缩放的比例
+    function geScale(w=1920,h=1080){
+        // 计算放大缩小的比例
+        const ww = window.innerWidth / w
+        const hh = window.innerHeight / h
+        // 用ww还是hh（用一个可能有留白，但是保证了不失真）
+        return ww < hh ? ww : hh
+        // 正常情况1920/1920 1080/1080比例为1:1
+        // ww < hh的情况 hh在变大，ww在变小
+
+    }
+    let box = document.querySelector(".box")
+    box.style.transform = `scale(${getScale()}) translate(-50%,-50%)` 
+    window.resize = ()=>{
+            let box = document.querySelector(".box")
+            box.style.transform = `scale(${getScale()}) translate(-50%,-50%)`
+    }
+    详见screen.html
+*/
